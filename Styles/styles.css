@@ -118,3 +118,13 @@ body {
     color: #6c757d;
     opacity: 1;
   }
+
+/* David CSS */
+.incident-name {
+  color: black !important;
+  text-decoration: none;
+}
+
+.incident-name:hover {
+  color: #333 !important; /* Slightly darker on hover */
+}

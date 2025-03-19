@@ -160,7 +160,7 @@ const incidents = [
       <a href="detalle.html" class="btn btn-outline-primary">Detalle de Incidente</a>
       <a href="crear.html" class="btn btn-outline-primary">Crear Incidente</a>
       <a href="registro.html" class="btn btn-outline-primary">Registro de Usuarios</a>
-      <a href="historial.html" class="btn btn-outline-primary">Historial y Seguimiento</a>
+      <a href="../Historial-gestion-incidentes/historial.html" class="btn btn-outline-primary">Historial y Seguimiento</a>
     `;
     document.body.appendChild(linksDiv);
   };

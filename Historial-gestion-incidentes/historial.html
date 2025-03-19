@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Incidentes</title>
+
+    <!-- Bootstrap & Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos Principales -->
+    <link rel="stylesheet" href="../Styles/styles.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #eef2f3, #8ec5fc);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .card-style {
+            background: #ffffffc7;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .badge-alta {
+            background-color: #ff4d4d;
+            color: #fff;
+        }
+
+        .badge-media {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-baja {
+            background-color: #28a745;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barra de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../Dashboard-gestion-incidentes/index.html">
+                <i class="fa-solid fa-chart-line me-2"></i>Gestión de Incidentes
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenido de la Página -->
+    <div class="container mt-4">
+        <h2 class="text-primary text-center mb-4">Historial de Incidentes</h2>
+
+        <div class="card-style">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="statusFilter" class="form-label fw-bold">Filtrar por Estado:</label>
+                    <select id="statusFilter" class="form-select">
+                        <option value="all">Todos</option>
+                        <option value="Resuelto">Resuelto</option>
+                        <option value="Cerrado">Cerrado</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tabla de Incidentes -->
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Nombre del Incidente</th>
+                        <th>Severidad</th>
+                        <th>Estado</th>
+                        <th>Fecha de Cierre</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable">
+                    <!-- Datos generados dinámicamente desde historial.js -->
+                </tbody>
+            </table>
+
+            <!-- Botón para Volver al Dashboard -->
+            <div class="d-flex justify-content-center mt-4">
+                <a href="../Dashboard-gestion-incidentes/index.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Volver al Dashboard
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tarjeta de Detalle del Incidente -->
+    <div id="incidentDetailCard" class="card mt-4 mx-auto card-style" style="display: none; max-width: 90%;">
+        <div class="card-body">
+            <h4 id="incidentTitle" class="card-title text-primary"></h4>
+            <p><strong>Descripción:</strong> <span id="incidentDescription"></span></p>
+            <p><strong>Severidad:</strong> <span id="incidentSeverity"></span></p>
+            <p><strong>Ingeniero Asignado:</strong> <span id="incidentEngineer"></span></p>
+            <p><strong>Stakeholders Involucrados:</strong> <span id="incidentStakeholders"></span></p>
+            <p><strong>Fecha de Creación:</strong> <span id="incidentDateCreated"></span></p>
+            <p><strong>Fecha de Cierre:</strong> <span id="incidentDateClosed"></span></p>
+            <div class="text-end">
+                <button id="closeDetail" class="btn btn-secondary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <script src="historial.js"></script>
+
+</body>
+
+</html>
