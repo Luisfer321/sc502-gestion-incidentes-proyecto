@@ -1,0 +1,205 @@
+/* styles.css */
+
+body {
+    background: linear-gradient(135deg, #eef2f3, #8ec5fc);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+  }
+  
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+  }
+  
+  h2 {
+    color: #0d6efd;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .card-style {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    transition: transform 0.3s;
+  }
+  
+  .card-style:hover {
+    transform: scale(1.02);
+  }
+  
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  
+  .table th:hover i {
+    color: #0d6efd;
+  }
+  
+  .badge {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  
+  .badge-alta {
+    background-color: #ff4d4d;
+    color: #fff;
+  }
+  
+  .badge-media {
+    background-color: #ffc107;
+    color: #212529;
+  }
+  
+  .badge-baja {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .footer-gradient {
+    background: linear-gradient(90deg, #0d6efd, #6610f2);
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+    cursor: pointer;
+  }
+  
+  .animated-header {
+    animation: fadeSlide 1.5s ease;
+    font-size: 2rem;
+  }
+  
+  @keyframes fadeSlide {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  input:focus, select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+  
+  footer p {
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+  
+  .table thead th {
+    background-color: #f8f9fa;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  select, input[type="text"] {
+    transition: all 0.3s ease;
+  }
+  
+  select:hover, input[type="text"]:hover {
+    transform: scale(1.02);
+  }
+  
+  select:focus, input[type="text"]:focus {
+    transform: scale(1.02);
+    outline: none;
+  }
+  
+  ::placeholder {
+    color: #6c757d;
+    opacity: 1;
+  }
+
+/* David CSS */
+.incident-name {
+  color: black !important;
+  text-decoration: none;
+}
+
+.incident-name:hover {
+  color: #333 !important; /* Slightly darker on hover */
+}
+
+/*Crear incidente CCS*/
+
+/* Personalización del popup de SweetAlert */
+.custom-swal-popup {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  border: 2px solid #ccc;
+}
+
+/* Título */
+.custom-swal-title {
+  color: #007bff;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Contenido */
+.custom-swal-content {
+  padding: 15px;
+  color: #555;
+}
+
+/* Botón de confirmar */
+.custom-swal-btn {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.custom-swal-btn:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+/* Botón de cancelar */
+.custom-swal-btn-cancel {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.custom-swal-btn-cancel:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.loading-indicator {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.badge-alta { background-color: #dc3545; }
+.badge-media { background-color: #ffc107; color: #000; }
+.badge-baja { background-color: #28a745; }
+
+.list-group-item {
+    transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}

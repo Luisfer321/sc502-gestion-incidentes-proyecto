@@ -1,45 +1,38 @@
-const incidents = [
-  { name: 'Error al iniciar sesión', severity: 'Alta', status: 'Abierto', date: '2024-03-15' },
-  { name: 'Falla en base de datos', severity: 'Alta', status: 'En proceso', date: '2024-03-12' },
-  { name: 'Página no carga', severity: 'Media', status: 'Cerrado', date: '2024-02-28' },
-  { name: 'Correo no enviado', severity: 'Baja', status: 'Abierto', date: '2024-03-10' },
-  { name: 'Tiempo de respuesta lento', severity: 'Media', status: 'En proceso', date: '2024-03-14' },
-  { name: 'Error 500 en servidor', severity: 'Alta', status: 'Cerrado', date: '2024-03-05' },
-];
-
 function loadTableData() {
   const tbody = document.getElementById('incidentTable');
-  tbody.innerHTML = '';
+  tbody.innerHTML = '<tr><td colspan="6" class="text-center">Cargando...</td></tr>';
 
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  const filterSeverity = document.getElementById('filterSeverity').value;
-  const filterStatus = document.getElementById('filterStatus').value;
-
-  const filteredIncidents = incidents.filter(i => {
-    return (
-      i.name.toLowerCase().includes(search) &&
-      (filterSeverity ? i.severity === filterSeverity : true) &&
-      (filterStatus ? i.status === filterStatus : true)
-    );
+  const params = new URLSearchParams({
+      estado: document.getElementById('filterStatus').value,
+      severidad: document.getElementById('filterSeverity').value,
+      fecha: '' // Agregar lógica para fecha si es necesario
   });
 
-  if (filteredIncidents.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">No se encontraron incidentes 🤷‍♂️</td></tr>`;
-    return;
-  }
-
-  filteredIncidents.forEach((incident, index) => {
-    const severityClass = incident.severity === 'Alta' ? 'badge-alta' : incident.severity === 'Media' ? 'badge-media' : 'badge-baja';
-    const row = `<tr>
-      <td onclick="showIncidentAlert('${incident.name}', '${incident.severity}', '${incident.status}', '${incident.date}')">${incident.name}</td>
-      <td><span class="badge ${severityClass}">${incident.severity}</span></td>
-      <td>${incident.status}</td>
-      <td>${incident.date}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="confirmDeleteIncident(${index})"><i class="fa-solid fa-trash"></i></button></td>
-      <td><a href="../Detalle/detalle.html?index=${index}" class="btn btn-sm btn-primary">Ver Detalle</a></td>
-    </tr>`;
-    tbody.innerHTML += row;
-  });
+  fetch(`../backend/listar_incidentes.php?${params}`)
+      .then(response => response.json())
+      .then(incidents => {
+          tbody.innerHTML = '';
+          
+          incidents.forEach(incident => {
+              const severityClass = `badge-${incident.severity.toLowerCase()}`;
+              const row = `
+                  <tr>
+                      <td>${incident.title}</td>
+                      <td><span class="badge ${severityClass}">${incident.severity}</span></td>
+                      <td>${incident.status}</td>
+                      <td>${new Date(incident.created_at).toLocaleDateString()}</td>
+                      <td><button class="btn btn-sm btn-danger" onclick="confirmDeleteIncident(${incident.id})">
+                          <i class="fa-solid fa-trash"></i>
+                      </button></td>
+                      <td><a href="../Detalle/detalle.html?id=${incident.id}" class="btn btn-sm btn-primary">Ver Detalle</a></td>
+                  </tr>`;
+              tbody.innerHTML += row;
+          });
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error al cargar datos</td></tr>';
+      });
 }
 
 function sortTable(columnIndex) {
@@ -181,3 +174,14 @@ window.onload = () => {
   `;
   document.body.appendChild(linksDiv);
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+    const res = await fetch("../Gestion-usuarios/backend/logout.php");
+    if (res.ok) {
+      window.location.href = "../Gestion-usuarios/login.html";
+    } else {
+      alert("⚠️ Error al cerrar sesión.");
+    }
+  });
+});

@@ -6,7 +6,6 @@
   <title>Detalle de Incidente</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="detalle.css">
   <style>
     body {
       background: linear-gradient(135deg, #eef2f3, #8ec5fc);
@@ -66,12 +65,12 @@
     const incidentIndex = params.get('index');
 
     const incidents = [
-      { name: 'Error al iniciar sesión', description: 'Error de autenticación.', severity: 'Alta', status: 'Abierto', stakeholders: ['Equipo TI', 'Usuarios'] },
-      { name: 'Falla en base de datos', description: 'Problema crítico en base de datos.', severity: 'Alta', status: 'En proceso', stakeholders: ['DBA', 'Backend'] },
-      { name: 'Página no carga', description: 'El front-end presenta problemas.', severity: 'Media', status: 'Cerrado', stakeholders: ['Soporte', 'Usuarios'] },
-      { name: 'Correo no enviado', description: 'SMTP no responde.', severity: 'Baja', status: 'Abierto', stakeholders: ['Comunicaciones'] },
-      { name: 'Tiempo de respuesta lento', description: 'Problemas de rendimiento.', severity: 'Media', status: 'En proceso', stakeholders: ['Frontend', 'Backend'] },
-      { name: 'Error 500 en servidor', description: 'Error interno del servidor.', severity: 'Alta', status: 'Cerrado', stakeholders: ['TI', 'Usuarios'] },
+      { name: 'Error al iniciar sesión', description: 'Error de autenticación.', severity: 'Alta', status: 'Abierto', stakeholders: ['Equipo TI', 'Usuarios'], responsible: '', history: [] },
+      { name: 'Falla en base de datos', description: 'Problema crítico en base de datos.', severity: 'Alta', status: 'En proceso', stakeholders: ['DBA', 'Backend'], responsible: '', history: [] },
+      { name: 'Página no carga', description: 'El front-end presenta problemas.', severity: 'Media', status: 'Cerrado', stakeholders: ['Soporte', 'Usuarios'], responsible: '', history: [] },
+      { name: 'Correo no enviado', description: 'SMTP no responde.', severity: 'Baja', status: 'Abierto', stakeholders: ['Comunicaciones'], responsible: '', history: [] },
+      { name: 'Tiempo de respuesta lento', description: 'Problemas de rendimiento.', severity: 'Media', status: 'En proceso', stakeholders: ['Frontend', 'Backend'], responsible: '', history: [] },
+      { name: 'Error 500 en servidor', description: 'Error interno del servidor.', severity: 'Alta', status: 'Cerrado', stakeholders: ['TI', 'Usuarios'], responsible: '', history: [] },
     ];
 
     if (incidentIndex !== null && incidents[incidentIndex]) {
@@ -81,10 +80,12 @@
       document.getElementById('incident-description').innerText = incident.description;
       document.getElementById('incident-severity').innerText = incident.severity;
       document.getElementById('incident-severity').classList.add(
-        incident.severity === 'Alta' ? 'badge-danger' :
-        incident.severity === 'Media' ? 'badge-warning' : 'badge-success'
+        incident.severity === 'Alta' ? 'bg-danger' :
+        incident.severity === 'Media' ? 'bg-warning' : 'bg-success',
+        'text-white'
       );
       document.getElementById('incident-status').value = incident.status;
+      document.getElementById('incident-responsible').value = incident.responsible;
 
       const stakeholdersList = document.getElementById('incident-stakeholders');
       incident.stakeholders.forEach(stk => {
@@ -94,8 +95,40 @@
         stakeholdersList.appendChild(li);
       });
 
+      const historyList = document.getElementById('incident-history');
+      const actualizarHistorial = () => {
+        historyList.innerHTML = '';
+        incident.history.forEach(entry => {
+          const item = document.createElement('li');
+          item.className = 'list-group-item';
+          item.textContent = entry;
+          historyList.appendChild(item);
+        });
+      };
+      actualizarHistorial();
+
       document.getElementById('save-btn').addEventListener('click', () => {
-        Swal.fire('Cambios guardados', 'La información ha sido actualizada.', 'success');
+        const nuevoResponsable = document.getElementById('incident-responsible').value;
+        const nuevoEstado = document.getElementById('incident-status').value;
+
+        let cambios = false;
+
+        if (nuevoResponsable && nuevoResponsable !== incident.responsible) {
+          incident.history.push(`Responsable asignado: ${nuevoResponsable}`);
+          incident.responsible = nuevoResponsable;
+          cambios = true;
+        }
+
+        if (nuevoEstado !== incident.status) {
+          incident.history.push(`Estado cambiado de "${incident.status}" a "${nuevoEstado}"`);
+          incident.status = nuevoEstado;
+          cambios = true;
+        }
+
+        if (cambios) {
+          actualizarHistorial();
+          Swal.fire('Cambios guardados', 'La información ha sido actualizada.', 'success');
+        }
       });
     } else {
       document.body.innerHTML = '<h2 class="text-center text-danger mt-5">❌ Incidente no encontrado.</h2>';

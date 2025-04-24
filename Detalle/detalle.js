@@ -1,57 +1,58 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const formDetalle = document.getElementById("formDetalle");
-  const historial = document.getElementById("historial");
+document.addEventListener("DOMContentLoaded", () => { 
+    const formDetalle = document.getElementById("formDetalle");
+    const historial = document.getElementById("historial");
 
-  // Datos iniciales (se pueden obtener desde una API o localStorage)
-  const incidente = {
-      descripcion: "Problema con la autenticación de usuarios.",
-      pasos: "1. Abrir la aplicación\n2. Ingresar credenciales\n3. Error de autenticación",
-      stakeholders: "Equipo de Desarrollo",
-      responsable: "",
-      estado: "Abierto",
-      historial: []
-  };
+    const urlParams = new URLSearchParams(window.location.search);
+    const incidenteId = urlParams.get('id');
 
-  // Mostrar datos iniciales
-  document.getElementById("descripcion").value = incidente.descripcion;
-  document.getElementById("pasos").value = incidente.pasos;
-  document.getElementById("stakeholders").value = incidente.stakeholders;
-  document.getElementById("estado").value = incidente.estado;
+    const descripcion = document.getElementById("descripcion");
+    const pasos = document.getElementById("pasos");
+    const stakeholders = document.getElementById("stakeholders");
+    const estado = document.getElementById("estado");
+    const responsable = document.getElementById("responsable");
 
-  // Cargar historial (si existe)
-  function actualizarHistorial() {
-      historial.innerHTML = "";
-      incidente.historial.forEach(entry => {
-          const item = document.createElement("li");
-          item.className = "list-group-item";
-          item.textContent = entry;
-          historial.appendChild(item);
-      });
-  }
+    // Cargar datos desde PHP
+    fetch(`../detalle_incidente.php?id=${incidenteId}`)
+        .then(response => response.json())
+        .then(data => {
+            descripcion.value = data.descripcion;
+            pasos.value = data.pasos;
+            stakeholders.value = data.stakeholders;
+            estado.value = data.estado;
+            responsable.value = data.responsable;
+            mostrarHistorial(data.historial);
+        });
 
-  actualizarHistorial();
+    function mostrarHistorial(historialArray) {
+        historial.innerHTML = "";
+        historialArray.forEach(entry => {
+            const item = document.createElement("li");
+            item.className = "list-group-item";
+            item.textContent = entry;
+            historial.appendChild(item);
+        });
+    }
 
-  // Guardar cambios
-  formDetalle.addEventListener("submit", (e) => {
-      e.preventDefault();
+    formDetalle.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-      const nuevoResponsable = document.getElementById("responsable").value;
-      const nuevoEstado = document.getElementById("estado").value;
-
-      // Solo guardar si hay cambios
-      if (nuevoResponsable || nuevoEstado !== incidente.estado) {
-          if (nuevoResponsable) {
-              incidente.responsable = nuevoResponsable;
-          }
-          if (nuevoEstado !== incidente.estado) {
-              incidente.historial.push(`Estado cambiado de "${incidente.estado}" a "${nuevoEstado}"`);
-              incidente.estado = nuevoEstado;
-          }
-
-          // Actualizar historial
-          actualizarHistorial();
-
-          alert("Cambios guardados correctamente");
-      }
-  });
+        fetch('../actualizar_estado.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: incidenteId,
+                estado: estado.value,
+                responsable: responsable.value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                alert("Cambios guardados correctamente");
+                mostrarHistorial(data.historial); // actualizar si PHP devuelve historial actualizado
+            } else {
+                alert("Error al guardar los cambios");
+            }
+        });
+    });
 });
